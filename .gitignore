@@ -27,3 +27,11 @@ Thumbs.db
 # Logs
 logs/
 *.log
+
+# Node.js / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+.npm
+.eslintcache
