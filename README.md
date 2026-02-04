@@ -89,7 +89,9 @@ teamtodo-backend/
 │   │   │       ├── controller/     # 控制器
 │   │   │       ├── service/        # 服务层
 │   │   │       ├── mapper/         # MyBatis Mapper
-│   │   │       └── entity/         # 实体类
+│   │   │       ├── entity/         # 实体类
+│   │   │       ├── dto/            # 数据传输对象
+│   │   │       └── exception/      # 异常处理
 │   │   └── resources/
 │   │       ├── application.yml
 │   │       └── db/
@@ -100,8 +102,19 @@ teamtodo-backend/
 └── pom.xml
 ```
 
+## API 文档
+
+### 任务管理 API
+查看 [TASK_API.md](TASK_API.md) 了解任务创建和查询 API 的详细信息。
+
+**可用端点:**
+- `POST /api/tasks` - 创建新任务
+- `GET /api/tasks/{id}` - 获取任务详情
+
 ## 验收标准检查
 
 - [x] Spring Boot应用可成功启动
 - [x] 数据库连接配置完成
 - [x] 基础健康检查接口可访问
+- [x] 任务创建API实现 (US008)
+- [x] 任务详情API实现 (US008)
