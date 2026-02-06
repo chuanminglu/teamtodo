@@ -32,6 +32,14 @@
         <h2>Vue Router 路由测试</h2>
         <el-button type="primary" @click="goToAbout">前往关于页面</el-button>
       </div>
+
+      <el-divider />
+      
+      <div class="demo-section">
+        <h2>项目成员管理功能 (US005)</h2>
+        <p>测试项目成员的添加、查看、移除功能</p>
+        <el-button type="primary" @click="goToProject">查看项目详情与成员管理</el-button>
+      </div>
     </el-card>
   </div>
 </template>
@@ -53,6 +61,10 @@ const handleClick = () => {
 
 const goToAbout = () => {
   router.push('/about')
+}
+
+const goToProject = () => {
+  router.push('/project/1')
 }
 </script>
 
