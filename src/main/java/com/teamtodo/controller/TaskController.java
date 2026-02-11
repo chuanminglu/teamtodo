@@ -50,14 +50,4 @@ public class TaskController {
             return ResponseEntity.status(403).body(error);
         }
     }
-    
-    /**
-     * Exception handler for validation errors
-     */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleNotFound(IllegalArgumentException e) {
-        Map<String, String> error = new HashMap<>();
-        error.put("message", e.getMessage());
-        return ResponseEntity.status(404).body(error);
-    }
 }
