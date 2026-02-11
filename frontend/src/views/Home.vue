@@ -40,6 +40,14 @@
         <p>测试项目成员的添加、查看、移除功能</p>
         <el-button type="primary" @click="goToProject">查看项目详情与成员管理</el-button>
       </div>
+
+      <el-divider />
+      
+      <div class="demo-section">
+        <h2>任务编辑功能 (US010)</h2>
+        <p>测试任务信息的编辑功能 - 编辑标题、描述、优先级、截止日期</p>
+        <el-button type="primary" @click="goToTaskDemo">查看任务详情与编辑</el-button>
+      </div>
     </el-card>
   </div>
 </template>
@@ -65,6 +73,10 @@ const goToAbout = () => {
 
 const goToProject = () => {
   router.push('/project/1')
+}
+
+const goToTaskDemo = () => {
+  router.push('/task/1')
 }
 </script>
 
