@@ -36,6 +36,14 @@
       <el-divider />
       
       <div class="demo-section">
+        <h2>项目管理功能 (US004)</h2>
+        <p>创建项目、查看项目列表、进入项目详情</p>
+        <el-button type="primary" @click="goToProjects">查看项目列表</el-button>
+      </div>
+
+      <el-divider />
+
+      <div class="demo-section">
         <h2>项目成员管理功能 (US005)</h2>
         <p>测试项目成员的添加、查看、移除功能</p>
         <el-button type="primary" @click="goToProject">查看项目详情与成员管理</el-button>
@@ -61,6 +69,10 @@ const handleClick = () => {
 
 const goToAbout = () => {
   router.push('/about')
+}
+
+const goToProjects = () => {
+  router.push('/projects')
 }
 
 const goToProject = () => {
