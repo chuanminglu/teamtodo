@@ -27,6 +27,26 @@ CREATE TABLE IF NOT EXISTS projects (
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tasks table (US015)
+CREATE TABLE IF NOT EXISTS tasks (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    status VARCHAR(20) NOT NULL DEFAULT 'TODO',
+    CHECK (status IN ('TODO', 'IN_PROGRESS', 'DONE')),
+    creator_id BIGINT NOT NULL,
+    assignee_id BIGINT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_task_project_id (project_id),
+    INDEX idx_task_creator_id (creator_id),
+    INDEX idx_task_assignee_id (assignee_id),
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (creator_id) REFERENCES users(id),
+    FOREIGN KEY (assignee_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Project Members table
 CREATE TABLE IF NOT EXISTS project_members (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
