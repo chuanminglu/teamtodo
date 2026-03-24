@@ -10,6 +10,14 @@
           <p><strong>Owner ID:</strong> {{ project.ownerId }}</p>
         </el-card>
       </el-tab-pane>
+
+      <!-- US015: Task Board Tab -->
+      <el-tab-pane label="任务看板" name="tasks">
+        <TaskBoard
+          :project-id="projectId"
+          :current-user-id="currentUserId"
+        />
+      </el-tab-pane>
       
       <!-- Member Management Tab -->
       <el-tab-pane label="Members" name="members">
@@ -27,6 +35,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import MemberManage from '../components/MemberManage.vue';
+import TaskBoard from '../components/TaskBoard.vue';
 
 const router = useRouter();
 
