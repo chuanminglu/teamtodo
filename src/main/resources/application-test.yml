@@ -27,3 +27,7 @@ management:
   endpoint:
     health:
       show-details: always
+
+security:
+  jwt:
+    secret: test-jwt-secret-for-security-tests-123456

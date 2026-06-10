@@ -3,9 +3,12 @@ package com.teamtodo.controller;
 import com.teamtodo.dto.AddMemberRequest;
 import com.teamtodo.dto.MemberResponse;
 import com.teamtodo.entity.ProjectMember;
+import com.teamtodo.security.ProjectAuthorizationService;
 import com.teamtodo.service.ProjectMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +28,9 @@ public class ProjectMemberController {
     
     @Autowired
     private ProjectMemberService projectMemberService;
+
+    @Autowired
+    private ProjectAuthorizationService projectAuthorizationService;
     
     /**
      * T005-02: Add a member to a project
@@ -35,6 +41,9 @@ public class ProjectMemberController {
      */
     @PostMapping("/members")
     public ResponseEntity<?> addMember(@Valid @RequestBody AddMemberRequest request) {
+        Long currentUserId = getCurrentUserId();
+        projectAuthorizationService.requireProjectMember(request.getProjectId(), currentUserId);
+        projectAuthorizationService.requireProjectAdmin(request.getProjectId(), currentUserId);
         try {
             ProjectMember member = projectMemberService.addMember(request);
             return ResponseEntity.ok(member);
@@ -55,6 +64,7 @@ public class ProjectMemberController {
      */
     @GetMapping("/{projectId}/members")
     public ResponseEntity<List<MemberResponse>> getProjectMembers(@PathVariable Long projectId) {
+        projectAuthorizationService.requireProjectMember(projectId, getCurrentUserId());
         List<MemberResponse> members = projectMemberService.getProjectMembers(projectId);
         return ResponseEntity.ok(members);
     }
@@ -72,9 +82,12 @@ public class ProjectMemberController {
     public ResponseEntity<?> removeMember(
             @PathVariable Long projectId,
             @PathVariable Long memberId,
-            @RequestParam Long requestUserId) {
+            @RequestParam(required = false) Long requestUserId) {
+        Long currentUserId = getCurrentUserIdOrFallback(requestUserId);
+        projectAuthorizationService.requireProjectMember(projectId, currentUserId);
+        projectAuthorizationService.requireProjectAdmin(projectId, currentUserId);
         try {
-            projectMemberService.removeMember(projectId, memberId, requestUserId);
+            projectMemberService.removeMember(projectId, memberId, currentUserId);
             Map<String, String> response = new HashMap<>();
             response.put("message", "Member removed successfully");
             return ResponseEntity.ok(response);
@@ -96,9 +109,23 @@ public class ProjectMemberController {
     public ResponseEntity<Map<String, Boolean>> checkMembership(
             @PathVariable Long projectId,
             @RequestParam Long userId) {
+        projectAuthorizationService.requireProjectMember(projectId, getCurrentUserId());
         boolean isMember = projectMemberService.isProjectMember(projectId, userId);
         Map<String, Boolean> response = new HashMap<>();
         response.put("isMember", isMember);
         return ResponseEntity.ok(response);
+    }
+
+    private Long getCurrentUserId() {
+        return getCurrentUserIdOrFallback(null);
+    }
+
+    private Long getCurrentUserIdOrFallback(Long fallbackUserId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication == null ? null : authentication.getPrincipal();
+        if (principal instanceof Long userId) {
+            return userId;
+        }
+        return fallbackUserId;
     }
 }
