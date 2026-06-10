@@ -43,3 +43,7 @@ management:
     health:
       # Only show details when authorized for production security
       show-details: when-authorized
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:replace-this-with-a-strong-secret-key-for-production}

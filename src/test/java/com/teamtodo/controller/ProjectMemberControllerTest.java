@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamtodo.dto.AddMemberRequest;
 import com.teamtodo.dto.MemberResponse;
 import com.teamtodo.entity.ProjectMember;
+import com.teamtodo.security.JwtTokenService;
+import com.teamtodo.security.ProjectAuthorizationService;
 import com.teamtodo.service.ProjectMemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -26,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Controller tests for ProjectMemberController
  */
 @WebMvcTest(ProjectMemberController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class ProjectMemberControllerTest {
     
     @Autowired
@@ -36,6 +40,12 @@ class ProjectMemberControllerTest {
     
     @MockBean
     private ProjectMemberService projectMemberService;
+
+    @MockBean
+    private ProjectAuthorizationService projectAuthorizationService;
+
+    @MockBean
+    private JwtTokenService jwtTokenService;
     
     /**
      * T005-02: Test add member API endpoint
